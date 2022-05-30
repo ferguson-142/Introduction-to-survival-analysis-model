@@ -20,7 +20,11 @@ library(xtable)
 survdata<-read.csv("Data_Ferguson.csv")
 xtable(head(survdata))
 View(survdata)
-summary(survdata)
+print.xtable(summary(survdata))
+print(xtable(summary(survdata)), size="\\tiny")
+str(survdata)
+table<-table(survdata$gender,survdata$status)
+xtable(table)
 
 #converting status to numeric
 
@@ -31,11 +35,11 @@ survdata$status[survdata$status=="Death"] <- 2
 
 #create the censoring variable(right censoring)
 
-survdata$censored[survdata$status== 2] <- 1 #not censored or experienced the event death
+survdata$censored[survdata$status== 2] <- 1 #not censored or experienced death
 survdata$censored[survdata$status== 1] <- 0 #0 if an individual was censored
 
 
-# computing the age
+# computing age
 
 survdata$Age <- (survdata$yearlastobserved - survdata$yearofbirth) 
 summary(survdata)
