@@ -10,7 +10,12 @@ install.packages("lubridate")
 install.packages("survival")
 install.packages("survminer")
 install.packages("xtable")
+install.packages("lessR")
+install.packages("dplyr")
 
+
+library(lessR)
+library(dplyr)
 library(readr)
 library(survival)
 library(survminer)
@@ -25,6 +30,7 @@ print(xtable(summary(survdata)), size="\\tiny")
 str(survdata)
 table<-table(survdata$gender,survdata$status)
 xtable(table)
+
 
 #converting status to numeric
 
@@ -77,9 +83,30 @@ hist(new_df$time_df,main="Duration variable distribution", col="green",xlab = "D
 new_df2 <- subset(new_df, time_df > 0 & Age > 0)
 summary(new_df2)
 
+#categorical variables 
+# count of cat.variables
+count(new_df2,gender)
+count(new_df2, status)
+
+#table of Age for the number of females and males
+xtable(xtabs(~ gender+Age,data=new_df2, addNA = TRUE))
+
+
+print(xtable((xtabs(~ gender+status,data=new_df2, addNA = TRUE))), size="\\tiny" )
+
+
+# Data Visualization
+
+BarChart(status,main="No. indiduals alive and died",data=new_df2)
+BarChart(gender,main="No. females and males",data=new_df2)
+
+#Data visualization by Age using gender and status
+BarChart(status,data=new_df2, by1 = Age)
+BarChart(gender,data=new_df2, by1 = Age)
+
 
 # inspection of the time_df variable distribution
-par(mfrow=c(1,2))
+par(mfrow=c(1, 2))
 hist(new_df$time_df,main="", col="green",xlab = "Days", 
      ylab = "Frequency",las=1)
 hist(new_df2$time_df,main="", col="green",xlab = "Days", 
